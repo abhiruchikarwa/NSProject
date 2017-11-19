@@ -1,5 +1,2 @@
 # NetSecProject
-Network Security Project
-Hello! 
-Here we go..
-Add comments on the changes you made here..
+The secure instant messaging system will have one server and multiple clients.
