@@ -1,0 +1,6 @@
+syntax = "proto2";
+
+message Request
+{
+    required string name = 2;
+}

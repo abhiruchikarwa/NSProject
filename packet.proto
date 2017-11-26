@@ -1,0 +1,12 @@
+syntax = "proto2";
+
+message Packet
+{
+    required string msgType = 1;
+    message subMsg
+    {
+        required int32 stepNumber = 1;
+        required string actMsg = 2;
+    }
+    required subMsg smsg = 2;
+}
