@@ -31,10 +31,10 @@ while 1:
         # make a new file if not
         action = 'wb'
     with open('clients.pkl', action) as f:
-        pickle.dump(data, f)
-        pickle.dump(addr[0], f)
-        pickle.dump(addr[1], f)
-            
+        # pickle.dump(data, f)
+        # pickle.dump(addr[0], f)
+        # pickle.dump(addr[1], f)
+        f.write(data)
     # breaks connection after data has been sent completely
     if not data:
         break

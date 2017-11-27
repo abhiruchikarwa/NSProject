@@ -3,6 +3,8 @@ import argparse
 import pickle
 import threading
 import json
+import packet_pb2
+
 
 parser = argparse.ArgumentParser()
 # username as input
@@ -32,25 +34,39 @@ ru = []
 rip = []
 rpn = []
 
+####################################################
+# Function to authenticate the server
+# Changes made today by Ketan
+def autheticatedLogin(uname, pwd):
+    w = func(pwd);
+    # send login request to the server
+    pkt1 = packet_pb2.Packet()
+    pkt1.msgType = "Login"
+    pkt1.smsg.stepNumber = 1
+    pkt1.smsg.actMsg = "This is my msg"
 
+    sendmsg(pkt1.SerializeToString());
+
+def  func(pwd):
+    return pwd+"what"
+
+####################################################
 # function to send messages to another client
 def sendmsg(smsg):
-    # removing the command from the original message
-    smsg = smsg[5:]
-    # extracting receiver's name
-    rec = smsg.partition(' ')[0]
-    # print rec
-    # to send data to the receiver
-    smsg = smsg[(len(rec) + 1):]
-    # print msg
+    # # removing the command from the original message
+    # smsg = smsg[5:]
+    # # extracting receiver's name
+    # rec = smsg.partition(' ')[0]
+    # # print rec
+    # # to send data to the receiver
+    # smsg = smsg[(len(rec) + 1):]
+    # # print msg
     # getting the place of user item in 'names' list
-    i = names.index(rec)
-    # making variables for receiver's ip-address and port
-    RIP = addr[i]
-    R_PORT = port[i]
+    # i = names.index(rec)
+    # # making variables for receiver's ip-address and port
     BUFFER_SIZE = 1024
     while smsg:
-        sentbytes = sc.sendto(smsg[:BUFFER_SIZE], (RIP, R_PORT))
+        sentbytes = sc.sendto(smsg[:BUFFER_SIZE], ("127.0.0.1", 9090))
         smsg = smsg[sentbytes:]
 
 
@@ -115,7 +131,7 @@ def chat():
                 st = threading.Thread(target=sendmsg(msg))
                 st.start()
                 # sendmsg(msg)
-            except socket.error, emsg:
+            except socket.error as emsg:
                 print 'Error: ' + str(emsg)
 
         else:
@@ -130,6 +146,6 @@ if __name__ == "__main__":
     except socket.error, msg:
         print 'Socket creation failed' + msg
     # calling the actual chat function to perform tasks
-    chat()
+    autheticatedLogin("Ketan", "pwd")
     # closing connection
     sc.close
