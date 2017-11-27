@@ -3,23 +3,27 @@ import argparse
 import pickle
 import threading
 import json
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.asymmetric import padding
 import packet_pb2
-
 
 parser = argparse.ArgumentParser()
 # username as input
-# parser.add_argument('-u', type = str, help = 'input username', action = 'store')
-# args = parser.parse_args()
+parser.add_argument('-u', type = str, help = 'input username', action = 'store')
+args = parser.parse_args()
 
 with open('config.json') as json_data_file:
-    data = json.load(json_data_file)
+    configdict = json.load(json_data_file)
 
 # print args
 
 # values taken as input assigned to variables
-# UN = args.u
-SIP = data["ipaddr"]
-UDP_PORT = data["port"]
+UN = args.u
+SIP = configdict["ipaddr"]
+UDP_PORT = configdict["port"]
+pubkey_path = configdict["pubkey"]
 
 # lists for storing data from the pickle file
 names = []
@@ -34,21 +38,47 @@ ru = []
 rip = []
 rpn = []
 
+
+# solving the challenge sent by the server
+def solvechallenge(c):
+    return c & 0xfffffff
+
+# use serverkeyencryption(public_key_loading(pubkey_path), msg) to encrypt the msg with server's public key
+
+def public_key_loading(key):
+    # loads the public key in .der format into a variable and returns it
+    with open(key, "rb") as key_file:
+        public_key = serialization.load_der_public_key(
+            key_file.read(),
+            backend=default_backend())
+        return public_key
+
+
+def serverkeyencryption(public_key, var):
+    # encrypts the received variable using the received public key
+    en_var = public_key.encrypt(var, padding.OAEP(
+        mgf=padding.MGF1(algorithm=hashes.SHA1()),
+        algorithm=hashes.SHA1(),
+        label=None))
+    # returns the encrypted  variable
+    return en_var
+
+
 ####################################################
 # Function to authenticate the server
 # Changes made today by Ketan
-def autheticatedLogin(uname, pwd):
-    w = func(pwd);
+def autheticatedLogin(uname, pswd):
+    w = func(pswd);
     # send login request to the server
     pkt1 = packet_pb2.Packet()
     pkt1.msgType = "Login"
     pkt1.smsg.stepNumber = 1
-    pkt1.smsg.actMsg = "This is my msg"
+    pkt1.smsg.actMsg = "Dummy message"
 
     sendmsg(pkt1.SerializeToString());
 
-def  func(pwd):
-    return pwd+"what"
+def  func(pswd):
+    return pswd+"what"
 
 ####################################################
 # function to send messages to another client
@@ -75,21 +105,9 @@ def recvmsg():
     while True:
         # to receive data
         rdata, adr = sc.recvfrom(1024)
-        try:
-            with open('clients.pkl', 'rb') as f:
-                while True:
-                    ru.append(pickle.load(f))
-                    rip.append(pickle.load(f))
-                    rpn.append(pickle.load(f))
-        except EOFError:
-            pass
         if not rdata:
             chat()
-        # extracting sender's username
-        # we find the index of the given address in the list & extract the username
-        j = rpn.index(adr[1])
-        SUN = ru[j]
-        print '<-- <From ' + str(adr[0]) + ' : ' + str(adr[1]) + ' : ' + SUN + '>: ' + rdata + '\n+>'
+        print 'received data: ' + rdata
 
 
 # basic function
@@ -145,6 +163,7 @@ if __name__ == "__main__":
         sc.connect((SIP, UDP_PORT))
     except socket.error, msg:
         print 'Socket creation failed' + msg
+
     # calling the actual chat function to perform tasks
     autheticatedLogin("Ketan", "pwd")
     # closing connection

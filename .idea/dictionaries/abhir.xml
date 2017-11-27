@@ -1,0 +1,25 @@
+<component name="ProjectDictionaryState">
+  <dictionary name="abhir">
+    <words>
+      <w>addr</w>
+      <w>configdict</w>
+      <w>dgram</w>
+      <w>emsg</w>
+      <w>generatechallenge</w>
+      <w>inet</w>
+      <w>ipaddr</w>
+      <w>pbkey</w>
+      <w>prikey</w>
+      <w>rdata</w>
+      <w>recvmsg</w>
+      <w>sconf</w>
+      <w>sendmsg</w>
+      <w>sentbytes</w>
+      <w>serverkeydecryption</w>
+      <w>serverkeyencryption</w>
+      <w>serverkeyencrytion</w>
+      <w>smsg</w>
+      <w>solvechallenge</w>
+    </words>
+  </dictionary>
+</component>

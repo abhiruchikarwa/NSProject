@@ -2,6 +2,13 @@ import json
 import socket
 import sys
 import os
+<<<<<<< HEAD
+import random
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.asymmetric import padding
+=======
 import pickle
 import random
 from cryptography.hazmat.backends import default_backend
@@ -11,6 +18,7 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives.asymmetric import utils
 import cryptography.exceptions
+>>>>>>> 07f5932e37ff4c01e5ae565ea1ee734ee3e43a7e
 
 IP_ADDR = '0.0.0.0'
 UDP_PORT = 9090
@@ -54,7 +62,6 @@ def generatechallenge():
 
 try:
     ss = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    open('clients.pkl', 'w')
     print "Server Initialized..."
 except socket.error, msg:
     print "Socket creation failed" + msg
@@ -65,17 +72,22 @@ ss.bind((IP_ADDR, UDP_PORT))
 
 while 1:
     data, addr = ss.recvfrom(1024)
-    if os.path.exists('clients.pkl'):
+    if os.path.exists('test.pkl'):
         # append if already exists
         action = 'ab'
     else:
         # make a new file if not
         action = 'wb'
+<<<<<<< HEAD
+    with open('test.pkl', action) as f:
+        f.write(data)
+=======
     with open('clients.pkl', action) as f:
         pickle.dump(data, f)
         pickle.dump(addr[0], f)
         pickle.dump(addr[1], f)
             
+>>>>>>> 07f5932e37ff4c01e5ae565ea1ee734ee3e43a7e
     # breaks connection after data has been sent completely
     if not data:
         break
