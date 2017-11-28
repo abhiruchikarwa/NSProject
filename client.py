@@ -24,6 +24,9 @@ UN = args.u
 SIP = configdict["ipaddr"]
 UDP_PORT = configdict["port"]
 pubkey_path = configdict["pubkey"]
+base = configdict["base"]
+p = configdict["p"]
+
 
 # lists for storing data from the pickle file
 names = []
