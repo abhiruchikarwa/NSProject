@@ -2,6 +2,7 @@
   <dictionary name="abhir">
     <words>
       <w>addr</w>
+      <w>autheticatedlogin</w>
       <w>configdict</w>
       <w>dgram</w>
       <w>emsg</w>
@@ -11,15 +12,19 @@
       <w>pbkey</w>
       <w>prikey</w>
       <w>rdata</w>
+      <w>receivepacket</w>
       <w>recvmsg</w>
       <w>sconf</w>
       <w>sendmsg</w>
+      <w>sendpacket</w>
       <w>sentbytes</w>
       <w>serverkeydecryption</w>
       <w>serverkeyencryption</w>
       <w>serverkeyencrytion</w>
       <w>smsg</w>
       <w>solvechallenge</w>
+      <w>userdict</w>
+      <w>userlist</w>
     </words>
   </dictionary>
 </component>

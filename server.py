@@ -2,23 +2,11 @@ import json
 import socket
 import sys
 import os
-<<<<<<< HEAD
 import random
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
-=======
-import pickle
-import random
-from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives import serialization
-from cryptography.hazmat.primitives.ciphers.aead import AESGCM
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.asymmetric import padding
-from cryptography.hazmat.primitives.asymmetric import utils
-import cryptography.exceptions
->>>>>>> 07f5932e37ff4c01e5ae565ea1ee734ee3e43a7e
 
 IP_ADDR = '0.0.0.0'
 UDP_PORT = 9090
@@ -31,6 +19,10 @@ UDP_PORT = 9090
 with open('sconf.json') as json_data_file:
     configdict = json.load(json_data_file)
 
+base = configdict["base"]
+print base
+p = configdict["p"]
+print p
 prikey_path = configdict["prikey"]
 
 # use serverkeydecryption(private_key_loading(prikey_path), msg) to decrypt the msg with server's private key
@@ -78,16 +70,8 @@ while 1:
     else:
         # make a new file if not
         action = 'wb'
-<<<<<<< HEAD
     with open('test.pkl', action) as f:
         f.write(data)
-=======
-    with open('clients.pkl', action) as f:
-        pickle.dump(data, f)
-        pickle.dump(addr[0], f)
-        pickle.dump(addr[1], f)
-            
->>>>>>> 07f5932e37ff4c01e5ae565ea1ee734ee3e43a7e
     # breaks connection after data has been sent completely
     if not data:
         break

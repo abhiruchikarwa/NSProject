@@ -1,0 +1,37 @@
+{
+    "Alice":{
+        "ipaddr":"127.0.0.1",
+        "port":54294,
+        "passwd":"A",
+        "conn":1,
+        "skey":10
+    },
+    "Bob":{
+        "ipaddr":"127.0.0.1",
+        "port":54296,
+        "passwd":"B",
+        "conn":1,
+        "skey":12
+    },
+    "Chris":{
+        "ipaddr":"127.0.0.1",
+        "port":54298,
+        "passwd":"C",
+        "conn":0,
+        "skey":14
+    },
+    "Dana":{
+        "ipaddr":"127.0.0.1",
+        "port":54300,
+        "passwd":"D",
+        "conn":1,
+        "skey":16
+    },
+    "Eric":{
+        "ipaddr":"127.0.0.1",
+        "port":54302,
+        "passwd":"E",
+        "conn":0,
+        "skey":18
+    }
+}

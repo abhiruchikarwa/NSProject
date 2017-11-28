@@ -1,3 +1,5 @@
 {
-  "prikey":"\"prikey.pem\""
+  "prikey":"\"prikey.pem\"",
+  "base":83,
+  "p":97
 }

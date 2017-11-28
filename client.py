@@ -30,15 +30,6 @@ names = []
 addr = []
 port = []
 
-cl = []
-cla = []
-clp = []
-
-ru = []
-rip = []
-rpn = []
-
-
 # solving the challenge sent by the server
 def solvechallenge(c):
     return c & 0xfffffff
@@ -67,7 +58,7 @@ def serverkeyencryption(public_key, var):
 ####################################################
 # Function to authenticate the server
 # Changes made today by Ketan
-def autheticatedLogin(uname, pswd):
+def autheticatedlogin(uname, pswd):
     w = func(pswd);
     # send login request to the server
     pkt1 = packet_pb2.Packet()
@@ -75,33 +66,22 @@ def autheticatedLogin(uname, pswd):
     pkt1.smsg.stepNumber = 1
     pkt1.smsg.actMsg = "Dummy message"
 
-    sendmsg(pkt1.SerializeToString());
+    sendpacket(pkt1.SerializeToString(), "127.0.0.1", 9090);
 
 def  func(pswd):
     return pswd+"what"
 
 ####################################################
-# function to send messages to another client
-def sendmsg(smsg):
-    # # removing the command from the original message
-    # smsg = smsg[5:]
-    # # extracting receiver's name
-    # rec = smsg.partition(' ')[0]
-    # # print rec
-    # # to send data to the receiver
-    # smsg = smsg[(len(rec) + 1):]
-    # # print msg
-    # getting the place of user item in 'names' list
-    # i = names.index(rec)
-    # # making variables for receiver's ip-address and port
+# function to send packets to anyone
+def sendpacket(packet, sip, sport):
     BUFFER_SIZE = 1024
-    while smsg:
-        sentbytes = sc.sendto(smsg[:BUFFER_SIZE], ("127.0.0.1", 9090))
-        smsg = smsg[sentbytes:]
+    while packet:
+        sentbytes = sc.sendto(packet[:BUFFER_SIZE], (sip, sport))
+        packet = packet[sentbytes:]
 
 
-# function to receive messages from another client
-def recvmsg():
+# function to receive packets from anywhere.
+def receivepacket():
     while True:
         # to receive data
         rdata, adr = sc.recvfrom(1024)
@@ -110,11 +90,39 @@ def recvmsg():
         print 'received data: ' + rdata
 
 
+def sendmsg(smsg):
+    # removing the command from the original message
+    smsg = smsg[5:]
+    # extracting receiver's name
+    rec = smsg.partition(' ')[0]
+    # ###print rec
+    # to send data to the receiver
+    smsg = smsg[(len(rec) + 1):]
+    # ###print msg
+    # getting the place of user item in 'names' list
+    i = names.index(rec)
+    # making variables for receiver's ip-address and port
+    RIP = addr[i]
+    R_PORT = port[i]
+    BUFFER_SIZE = 1024
+    while smsg:
+        sentbytes = sc.sendto(smsg[:BUFFER_SIZE], (RIP, R_PORT))
+        smsg = smsg[sentbytes:]
+
+
+def getlist():
+    try:
+        with open('users.json', 'rb') as user_data:
+            userdict = json.load(user_data)
+        return userdict
+    except EOFError:
+        pass
+
 # basic function
 def chat():
     while 1:
         # starting the message receiving thread
-        rt = threading.Thread(target=recvmsg)
+        rt = threading.Thread(target=receivepacket)
         rt.start()
 
         msg = raw_input('+>')
@@ -123,27 +131,12 @@ def chat():
         cmd = msg.partition(' ')[0]
 
         if cmd == "list":
-            try:
-                with open('clients.pkl', 'rb') as f:
-                    while True:
-                        cl.append(pickle.load(f))
-                        cla.append(pickle.load(f))
-                        clp.append(pickle.load(f))
-            except EOFError:
-                pass
-            print '<-- Signed In Users:' + ' '.join(str(p) for p in cl)
-            cl[:] = []
+            userlist = getlist()
+            for key, value in userlist.items():
+                if value["conn"] == 1:
+                    print key
 
         elif cmd == "send":
-            try:
-                with open('clients.pkl', 'rb') as f:
-                    while True:
-                        names.append(pickle.load(f))
-                        addr.append(pickle.load(f))
-                        port.append(pickle.load(f))
-            except EOFError:
-                pass
-
             try:
                 # starting the message sending thread
                 st = threading.Thread(target=sendmsg(msg))
@@ -151,6 +144,14 @@ def chat():
                 # sendmsg(msg)
             except socket.error as emsg:
                 print 'Error: ' + str(emsg)
+
+        elif cmd == "connect":
+            print "connect"
+
+        elif cmd == "disconnect":
+            print "disconnect"
+
+
 
         else:
             print 'Incorrect command/message'
@@ -163,8 +164,8 @@ if __name__ == "__main__":
         sc.connect((SIP, UDP_PORT))
     except socket.error, msg:
         print 'Socket creation failed' + msg
-
+    chat()
     # calling the actual chat function to perform tasks
-    autheticatedLogin("Ketan", "pwd")
+    autheticatedlogin("Ketan", "pwd")
     # closing connection
     sc.close
