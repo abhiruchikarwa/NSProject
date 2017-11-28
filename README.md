@@ -9,4 +9,4 @@ All the users are pre-registered with the server.
 Every user will have a username and a password which will be used for logging into the system; only the user knows his/her password.
 The username-password pair will be stored on the server, but in a secured manner.
 Every client in the system will know the public key amongst the public-private key pair of the server.
-No other keys or passwords are stored.
+No other keys or passwords are stored
