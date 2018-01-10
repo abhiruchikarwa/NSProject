@@ -1,3 +1,6 @@
+*This system was developed as part of the coursework of the Network Security course taken in the Master of Science in Computer Science program at Northeastern University, Boston, MA.*
+
+
 To get the server running, run server.py. The file takes no command line arguments.
 If you want to change the IP address and the port that you want to bind the server to, update those values in sconf.json.
 The server keeps track of all the registered users by storing their names and password hashes is the users.json file. This file is only accessible to the server and isn't encrypted.
